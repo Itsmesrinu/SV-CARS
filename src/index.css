@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/*
+  Tailwind v4 scans the whole project for class names. `prompts/` and `docs/`
+  are prose about this codebase, and a snippet like `file:line` in them is read
+  as an arbitrary property and emitted as real CSS (`.[file\:line]{file:line}`),
+  which esbuild then warns about on every build. Exclude them.
+*/
+@source not "../prompts";
+@source not "../docs";
+@source not "../ui-prompts";
+@source not "../tests";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+
+  --color-primary: #00408b;
+  --color-surface: #ffffff;
+  --color-surface-container-low: #f2f3fc;
+  --color-tertiary-container: #742d00; /* Burnt Orange */
+  --color-emerald: #10b981;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #128c7e;
+
+  --shadow-card: 0 20px 40px rgba(25, 28, 34, 0.04);
+  --shadow-bar: 0 -8px 24px rgba(15, 23, 42, 0.08);
+  
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+}
+
+@layer base {
+  html {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Anchor links (Reviews, Office Location) glide to the section instead of
+       jumping. `scroll-margin-top` on [id] keeps the target clear of the navbar.
+       Collapsed to `auto` under prefers-reduced-motion below. */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans bg-surface text-slate-900;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline tracking-tighter;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /*
+    Press feedback. The native tap highlight is disabled on `body`, so on touch a
+    tap gives almost no signal on its own. On press every control now visibly
+    shrinks AND dims in its OWN colour — a darker blue for the primary CTA, a grey
+    for the white outline buttons, a deeper burnt-orange for Instagram — so a tap
+    is always felt without hard-coding a pressed shade per button.
+
+    `scale` (the CSS longhand, not `transform`) is used on purpose: it composes
+    with the site's `translate`/positioning utilities, so it will not knock the
+    centred carousel arrows out of place. Transforms don't apply to inline text,
+    so plain inline links just darken while real buttons shrink — exactly right.
+  */
+  button:not(:disabled):active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  a:active,
+  label:active,
+  summary:active {
+    scale: 0.96;
+    filter: brightness(0.9);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    button:not(:disabled):active,
+    [role="button"]:not([aria-disabled="true"]):active,
+    a:active,
+    label:active,
+    summary:active {
+      scale: 1;
+    }
+  }
+
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+.glass-nav {
+  @apply bg-white/70 backdrop-blur-2xl;
+}
+
+.tonal-layer {
+  @apply bg-surface-container-low;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
