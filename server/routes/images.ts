@@ -13,15 +13,15 @@
 import { and, asc, eq, ne } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../../db';
-import { carImages } from '../../db/schema';
-import type { AppEnv } from '../lib/auth';
-import { CLOUDINARY_FOLDER_ROOT, destroyAsset, signUpload } from '../lib/cloudinary';
-import { notFound, validationFailed } from '../lib/errors';
-import { carExists, nextImageSortOrder } from '../lib/queries';
-import { slugify } from '../lib/slug';
-import { toCarImageDTO } from '../lib/mappers';
-import { isUuid, nonEmptyString, parseBody } from '../lib/validate';
+import { db } from '../../db/index.js';
+import { carImages } from '../../db/schema.js';
+import type { AppEnv } from '../lib/auth.js';
+import { CLOUDINARY_FOLDER_ROOT, destroyAsset, signUpload } from '../lib/cloudinary.js';
+import { notFound, validationFailed } from '../lib/errors.js';
+import { carExists, nextImageSortOrder } from '../lib/queries.js';
+import { slugify } from '../lib/slug.js';
+import { toCarImageDTO } from '../lib/mappers.js';
+import { isUuid, nonEmptyString, parseBody } from '../lib/validate.js';
 
 const imageKind = z.enum(['main', 'front', 'side', 'inside', 'back', 'other']);
 

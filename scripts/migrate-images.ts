@@ -23,17 +23,17 @@
  */
 
 // First import: loads .env.local then .env before anything reads process.env.
-import { REPO_ROOT, requireEnv } from '../db/seed/env';
+import { REPO_ROOT, requireEnv } from '../db/seed/env.js';
 
 import { existsSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { v2 as cloudinary } from 'cloudinary';
 import { eq } from 'drizzle-orm';
 import sharp from 'sharp';
-import { getDb } from '../db/index';
-import { carImages, cars, locations, type CarImageRow } from '../db/schema';
-import { DEFAULT_LOCATION_ID } from '../db/seed/officeData';
-import { carData, type CarData } from '../src/data/carImageMap';
+import { getDb } from '../db/index.js';
+import { carImages, cars, locations, type CarImageRow } from '../db/schema.js';
+import { DEFAULT_LOCATION_ID } from '../db/seed/officeData.js';
+import { carData, type CarData } from '../src/data/carImageMap.js';
 
 type ImageKind = CarImageRow['kind'];
 

@@ -11,17 +11,17 @@ import { compare } from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../../db';
-import { adminUsers } from '../../db/schema';
+import { db } from '../../db/index.js';
+import { adminUsers } from '../../db/schema.js';
 import {
   clearSessionCookie,
   createSessionToken,
   getSession,
   setSessionCookie,
   type AppEnv,
-} from '../lib/auth';
-import { invalidCredentials } from '../lib/errors';
-import { parseBody } from '../lib/validate';
+} from '../lib/auth.js';
+import { invalidCredentials } from '../lib/errors.js';
+import { parseBody } from '../lib/validate.js';
 
 /**
  * A real bcrypt hash of a throwaway string, compared against when the email is

@@ -16,7 +16,7 @@ import type { Context, MiddlewareHandler } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { sign, verify } from 'hono/jwt';
 import type { JWTPayload } from 'hono/utils/jwt/types';
-import { internal, unauthorized } from './errors';
+import { internal, unauthorized } from './errors.js';
 
 /** Frozen in CONTRACT.md §8 — P03's client sends it by `credentials: 'same-origin'`. */
 export const SESSION_COOKIE = 'sv_session';

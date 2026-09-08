@@ -14,15 +14,15 @@
 
 import { Hono } from 'hono';
 import type { MiddlewareHandler } from 'hono';
-import { requireAuth, type AppEnv } from './lib/auth';
-import { notFoundHandler, onError } from './lib/errors';
-import { authRoutes } from './routes/auth';
-import { availabilityRoutes } from './routes/availability';
-import { carRoutes } from './routes/cars';
-import { imageRoutes } from './routes/images';
-import { locationRoutes } from './routes/locations';
-import { publicRoutes } from './routes/public';
-import { settingsRoutes } from './routes/settings';
+import { requireAuth, type AppEnv } from './lib/auth.js';
+import { notFoundHandler, onError } from './lib/errors.js';
+import { authRoutes } from './routes/auth.js';
+import { availabilityRoutes } from './routes/availability.js';
+import { carRoutes } from './routes/cars.js';
+import { imageRoutes } from './routes/images.js';
+import { locationRoutes } from './routes/locations.js';
+import { publicRoutes } from './routes/public.js';
+import { settingsRoutes } from './routes/settings.js';
 
 /**
  * The two `/admin/*` routes that must work without a session.

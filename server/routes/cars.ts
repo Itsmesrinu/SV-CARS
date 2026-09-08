@@ -15,20 +15,20 @@
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../../db';
-import { carImages, cars } from '../../db/schema';
-import type { AppEnv } from '../lib/auth';
-import { destroyAssets } from '../lib/cloudinary';
-import { conflict, notFound, validationFailed } from '../lib/errors';
+import { db } from '../../db/index.js';
+import { carImages, cars } from '../../db/schema.js';
+import type { AppEnv } from '../lib/auth.js';
+import { destroyAssets } from '../lib/cloudinary.js';
+import { conflict, notFound, validationFailed } from '../lib/errors.js';
 import {
   carExists,
   definedOnly,
   loadCarDTO,
   locationExists,
   nextCarSortOrder,
-} from '../lib/queries';
-import { slugify, uniqueSlug } from '../lib/slug';
-import { money, nonEmptyString, nonNegativeInt, nullableText, parseBody } from '../lib/validate';
+} from '../lib/queries.js';
+import { slugify, uniqueSlug } from '../lib/slug.js';
+import { money, nonEmptyString, nonNegativeInt, nullableText, parseBody } from '../lib/validate.js';
 
 /**
  * Every writable column, all optional so the same object can back both create

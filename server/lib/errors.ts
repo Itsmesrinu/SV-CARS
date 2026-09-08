@@ -12,7 +12,7 @@
 import type { Context, ErrorHandler, NotFoundHandler } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { ZodError } from 'zod';
-import type { ApiError } from '../../src/types/api';
+import type { ApiError } from '../../src/types/api.js';
 
 /** Stable machine-readable codes. P03's client switches on these, so they are frozen. */
 export type ApiErrorCode =

@@ -19,7 +19,7 @@ config({ path: '.env', quiet: true });
 // evaluate the app (and anything it configures from env — e.g. P01's Cloudinary
 // SDK setup) before the two calls above had run.
 const { serve } = await import('@hono/node-server');
-const { createApp } = await import('../server/app');
+const { createApp } = await import('../server/app.js');
 
 const port = Number(process.env.API_PORT ?? 3001);
 

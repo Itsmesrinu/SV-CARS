@@ -11,8 +11,8 @@
 
 import type { Context } from 'hono';
 import { z } from 'zod';
-import { validationError, validationFailed } from './errors';
-import { isValidDate } from './dates';
+import { validationError, validationFailed } from './errors.js';
+import { isValidDate } from './dates.js';
 
 /** Parses and validates a JSON body, throwing `HttpError` on any failure. */
 export async function parseBody<T extends z.ZodType>(c: Context, schema: T): Promise<z.infer<T>> {

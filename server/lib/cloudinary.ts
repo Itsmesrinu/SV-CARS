@@ -14,7 +14,7 @@
  */
 
 import { v2 as cloudinary } from 'cloudinary';
-import { internal } from './errors';
+import { internal } from './errors.js';
 
 const REQUIRED_ENV = [
   'CLOUDINARY_CLOUD_NAME',

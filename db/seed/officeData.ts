@@ -11,7 +11,7 @@
  * `migrate-images` cannot drift about what the single office is called.
  */
 
-import type { NewLocationRow, NewSettingsRow } from '../schema';
+import type { NewLocationRow, NewSettingsRow } from '../schema.js';
 
 /**
  * The single `settings` row (CONTRACT.md §3 `SettingsDTO`).

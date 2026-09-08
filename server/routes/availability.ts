@@ -23,15 +23,15 @@
 import { and, asc, eq, gt, lt, ne } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../../db';
-import { carAvailabilityBlocks } from '../../db/schema';
-import type { CarAvailabilityBlockRow } from '../../db/schema';
-import type { AppEnv } from '../lib/auth';
-import { diffDays, isValidDate, startOfMonthInIndia, startOfNextMonth } from '../lib/dates';
-import { conflict, notFound, validationFailed } from '../lib/errors';
-import { toAvailabilityBlockDTO } from '../lib/mappers';
-import { carExists } from '../lib/queries';
-import { dateString, isUuid, parseBody } from '../lib/validate';
+import { db } from '../../db/index.js';
+import { carAvailabilityBlocks } from '../../db/schema.js';
+import type { CarAvailabilityBlockRow } from '../../db/schema.js';
+import type { AppEnv } from '../lib/auth.js';
+import { diffDays, isValidDate, startOfMonthInIndia, startOfNextMonth } from '../lib/dates.js';
+import { conflict, notFound, validationFailed } from '../lib/errors.js';
+import { toAvailabilityBlockDTO } from '../lib/mappers.js';
+import { carExists } from '../lib/queries.js';
+import { dateString, isUuid, parseBody } from '../lib/validate.js';
 
 /** ~1 year. Beyond that the month grid is not what is being asked for. */
 const MAX_WINDOW_DAYS = 366;

@@ -12,12 +12,12 @@
  */
 
 // First import: loads .env.local then .env before anything reads process.env.
-import { requireEnv } from '../db/seed/env';
+import { requireEnv } from '../db/seed/env.js';
 
 import { eq } from 'drizzle-orm';
-import { getDb } from '../db/index';
-import { settings } from '../db/schema';
-import { SETTINGS_SEED } from '../db/seed/officeData';
+import { getDb } from '../db/index.js';
+import { settings } from '../db/schema.js';
+import { SETTINGS_SEED } from '../db/seed/officeData.js';
 
 const force = process.argv.includes('--force');
 const dryRun = process.argv.includes('--dry-run');

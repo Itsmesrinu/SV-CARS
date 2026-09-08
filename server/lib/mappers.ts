@@ -18,14 +18,14 @@ import type {
   ImageKind,
   LocationDTO,
   SettingsDTO,
-} from '../../src/types/api';
+} from '../../src/types/api.js';
 import type {
   CarAvailabilityBlockRow,
   CarImageRow,
   CarRow,
   LocationRow,
   SettingsRow,
-} from '../../db/schema';
+} from '../../db/schema.js';
 
 export function toCarImageDTO(row: CarImageRow): CarImageDTO {
   return {

@@ -9,11 +9,11 @@
  */
 
 import { and, asc, eq, gt, max } from 'drizzle-orm';
-import { db } from '../../db';
-import { carAvailabilityBlocks, carImages, cars, locations } from '../../db/schema';
-import type { CarDTO } from '../../src/types/api';
-import { todayInIndia } from './dates';
-import { toCarDTO } from './mappers';
+import { db } from '../../db/index.js';
+import { carAvailabilityBlocks, carImages, cars, locations } from '../../db/schema.js';
+import type { CarDTO } from '../../src/types/api.js';
+import { todayInIndia } from './dates.js';
+import { toCarDTO } from './mappers.js';
 
 /**
  * Assembles one car exactly as `GET /api/cars/:id` does — including dropping

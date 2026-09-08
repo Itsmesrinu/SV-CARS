@@ -12,12 +12,12 @@
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../../db';
-import { settings } from '../../db/schema';
-import type { AppEnv } from '../lib/auth';
-import { destroyAsset } from '../lib/cloudinary';
-import { notFound } from '../lib/errors';
-import { toSettingsDTO } from '../lib/mappers';
+import { db } from '../../db/index.js';
+import { settings } from '../../db/schema.js';
+import type { AppEnv } from '../lib/auth.js';
+import { destroyAsset } from '../lib/cloudinary.js';
+import { notFound } from '../lib/errors.js';
+import { toSettingsDTO } from '../lib/mappers.js';
 import {
   money,
   nonEmptyString,
@@ -25,7 +25,7 @@ import {
   normalisePhone,
   parseBody,
   whatsappPhone,
-} from '../lib/validate';
+} from '../lib/validate.js';
 
 const settingsSchema = z.object({
   /**

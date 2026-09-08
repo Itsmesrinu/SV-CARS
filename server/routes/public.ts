@@ -14,17 +14,17 @@
 import { and, asc, eq, gt, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import type { Context } from 'hono';
-import { db, getDb } from '../../db';
-import { carAvailabilityBlocks, carImages, cars, locations, settings } from '../../db/schema';
+import { db, getDb } from '../../db/index.js';
+import { carAvailabilityBlocks, carImages, cars, locations, settings } from '../../db/schema.js';
 import type {
   CarAvailabilityBlockRow,
   CarImageRow,
   LocationRow,
-} from '../../db/schema';
-import type { AppEnv } from '../lib/auth';
-import { todayInIndia } from '../lib/dates';
-import { notFound } from '../lib/errors';
-import { toCarDTO, toLocationDTO, toSettingsDTO } from '../lib/mappers';
+} from '../../db/schema.js';
+import type { AppEnv } from '../lib/auth.js';
+import { todayInIndia } from '../lib/dates.js';
+import { notFound } from '../lib/errors.js';
+import { toCarDTO, toLocationDTO, toSettingsDTO } from '../lib/mappers.js';
 
 /**
  * The deliberate compromise from PLAN.md Phase 3: a visitor may see an owner's

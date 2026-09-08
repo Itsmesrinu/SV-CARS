@@ -11,13 +11,13 @@
 import { asc, count, eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../../db';
-import { cars, locations } from '../../db/schema';
-import type { AppEnv } from '../lib/auth';
-import { conflict, notFound } from '../lib/errors';
-import { toLocationDTO } from '../lib/mappers';
-import { definedOnly, nextLocationSortOrder } from '../lib/queries';
-import { slugify, uniqueSlug } from '../lib/slug';
+import { db } from '../../db/index.js';
+import { cars, locations } from '../../db/schema.js';
+import type { AppEnv } from '../lib/auth.js';
+import { conflict, notFound } from '../lib/errors.js';
+import { toLocationDTO } from '../lib/mappers.js';
+import { definedOnly, nextLocationSortOrder } from '../lib/queries.js';
+import { slugify, uniqueSlug } from '../lib/slug.js';
 import {
   nonEmptyString,
   nonNegativeInt,
@@ -26,7 +26,7 @@ import {
   nullableText,
   nullableWhatsappPhone,
   parseBody,
-} from '../lib/validate';
+} from '../lib/validate.js';
 
 /**
  * The branch phone reaches `wa.me/<phone>` untouched, so whatever the owner

@@ -16,12 +16,12 @@
  */
 
 // First import: loads .env.local then .env before anything reads process.env.
-import { requireEnv } from '../db/seed/env';
+import { requireEnv } from '../db/seed/env.js';
 
 import { hash } from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { getDb } from '../db/index';
-import { adminUsers } from '../db/schema';
+import { getDb } from '../db/index.js';
+import { adminUsers } from '../db/schema.js';
 
 /** bcrypt cost. 12 is the project standard; P01 verifies against whatever this writes. */
 const BCRYPT_ROUNDS = 12;
