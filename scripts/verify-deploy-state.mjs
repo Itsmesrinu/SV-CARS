@@ -1,3 +1,4 @@
+
 /**
  * Checks whether a checkout contains every deployment fix from 2026-09-07/08.
  *
@@ -63,8 +64,33 @@ function check(label, spec) {
 
 console.log(`\nVerifying deployment fixes in: ${root}\n`);
 
+// ------------------------------------------------------- 0. catch-all filename
+const API_ENTRY = 'api/[...route].ts';
+{
+  const single = fs.existsSync(path.join(root, API_ENTRY));
+  const double = fs.existsSync(path.join(root, 'api/[[...route]].ts'));
+  if (single && !double) {
+    console.log('ok    0. API entry is api/[...route].ts (single-bracket catch-all)');
+  } else {
+    failed++;
+    console.log('FAIL  0. API entry filename');
+    if (double) console.log('        found api/[[...route]].ts — the DOUBLE-bracket form');
+    if (!single) console.log(`        ${API_ENTRY} does not exist`);
+    console.log(
+      '        why: the double-bracket optional catch-all is a Next.js convention.\n' +
+        '             In a plain Vite project Vercel parses it as a SINGLE dynamic segment,\n' +
+        '             so only /api/<one-segment> reaches the function. Measured 2026-09-08:\n' +
+        '             /api/cars 200, /api/nope 200 (Hono 404), but /api/admin/me and\n' +
+        '             /api/cars/:id both returned X-Vercel-Error: NOT_FOUND.',
+    );
+    console.log(
+      '        symptom if unfixed: admin login fails with "The page could not be found",\n' +
+        '             and car detail pages cannot load — every 2+ segment API path 404s',
+    );
+  }
+}
+
 // ---------------------------------------------------------------- 1. ESM extensions
-const API_ENTRY = 'api/[[...route]].ts';
 check('1. API entry imports server/app WITH a .js extension', {
   file: API_ENTRY,
   must: [/from\s+['"]\.\.\/server\/app\.js['"]/],
@@ -83,12 +109,12 @@ check('2. API entry exports named HTTP methods and NO default export', {
 });
 
 // -------------------------------------------------------------- 3. SPA rewrite
-check('3. vercel.json SPA rewrite uses /(.*) with no negative lookahead', {
+check('3. vercel.json SPA rewrite EXCLUDES /api/', {
   file: 'vercel.json',
-  must: [/"source":\s*"\/\(\.\*\)"/],
-  mustNot: [/\?!api/],
-  why: "Vercel's rewrite source is path-to-regexp, not raw regex; a lookahead silently matches nothing. /api is already safe because the filesystem (including api/ functions) resolves before rewrites.",
-  symptom: "Vercel's \"The page could not be found\" on /admin, /all-cars, /car/... while / works",
+  must: [/\?!api/],
+  mustNot: [/"source":\s*"\/\(\.\*\)"/],
+  why: "Measured on this project 2026-09-08: a bare /(.*) rewrite DOES shadow the api/ functions — /api/health and /api/cars both came back as index.html with `Content-Disposition: inline; filename=\"index.html\"`. The rewrite must exclude /api/ explicitly. Do not 'simplify' this pattern.",
+  symptom: 'every /api/* route returns index.html, so no cars, prices or images render anywhere on the site',
 });
 
 // ------------------------------------------------------- 4. build-time env guard
