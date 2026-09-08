@@ -72,6 +72,24 @@ export function isUnauthorizedError(error: unknown): error is ApiRequestError {
   return error instanceof ApiRequestError && error.status === 401;
 }
 
+/**
+ * True only when **our API** said the record does not exist.
+ *
+ * Deliberately matches on `code`, never on `status === 404`. A 404 can also come
+ * from infrastructure that isn't our API at all — a missing Vercel rewrite, a
+ * function that failed to deploy, a proxy — and those arrive here as
+ * `code: 'invalid_response'` with `status: 404` and an HTML body. Telling a
+ * customer "this car doesn't exist" when the truth is "the API route is
+ * misrouted" hides a deployment fault behind a data message and sends whoever
+ * debugs it looking in the database. That cost real time on 2026-09-08.
+ *
+ * Callers that want "show the empty state" should use this; anything else is a
+ * genuine error and should surface `error.message`.
+ */
+export function isNotFoundError(error: unknown): error is ApiRequestError {
+  return error instanceof ApiRequestError && error.code === 'not_found';
+}
+
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   /** Serialised as JSON when present. `undefined` sends no body and no content-type. */

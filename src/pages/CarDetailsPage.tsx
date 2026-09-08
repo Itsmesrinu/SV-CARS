@@ -25,6 +25,7 @@ import {
 } from '@/src/components/ui';
 import { useCar } from '@/src/hooks/useCars';
 import { useSettings } from '@/src/hooks/useSettings';
+import { isNotFoundError } from '@/src/lib/api';
 import { availabilityLabel, carAvailability, formatDate } from '@/src/lib/availability';
 import { buildWhatsAppUrl } from '@/src/lib/booking';
 import {
@@ -101,7 +102,11 @@ export default function CarDetailsPage() {
   if (carQuery.isPending || settingsQuery.isPending) return <CarDetailSkeleton />;
 
   if (!car || !settings) {
-    const notFound = carQuery.error?.code === 'not_found' || carQuery.error?.status === 404;
+    // `isNotFoundError` matches on `code`, not `status === 404`: a bare 404 can
+    // come from infrastructure that isn't our API (a missing Vercel rewrite, an
+    // undeployed function), and reporting that as "Car Not Found" hides a
+    // routing fault behind a data message. See the helper's comment.
+    const notFound = isNotFoundError(carQuery.error);
     return (
       <EmptyState
         icon={notFound ? Car : AlertCircle}

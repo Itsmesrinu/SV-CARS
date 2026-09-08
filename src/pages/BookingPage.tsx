@@ -6,6 +6,7 @@ import ConciergeSidebarContent from '../components/booking/ConciergeSidebarConte
 import { EmptyState, Skeleton } from '@/src/components/ui';
 import { useCar } from '@/src/hooks/useCars';
 import { useSettings } from '@/src/hooks/useSettings';
+import { isNotFoundError } from '@/src/lib/api';
 import { addDays, todayInIndia } from '@/src/lib/availability';
 import { useDateRange } from '@/src/lib/dateFilter';
 
@@ -54,7 +55,10 @@ export default function BookingPage() {
   // No silent fallback to cars[0]: showing the wrong car with the wrong price is
   // worse than saying we couldn't find it.
   if (!carId || !car || !settings) {
-    const notFound = !carId || carQuery.error?.code === 'not_found' || carQuery.error?.status === 404;
+    // No `carId` in the URL is a genuine not-found. Otherwise match on `code`,
+    // not `status === 404` — see `isNotFoundError`, which explains why a bare
+    // 404 may be an infrastructure fault rather than a missing car.
+    const notFound = !carId || isNotFoundError(carQuery.error);
     return (
       <EmptyState
         title={notFound ? 'Car Not Found' : 'Something Went Wrong'}

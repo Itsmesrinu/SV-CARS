@@ -4,6 +4,7 @@ import {BrowserRouter} from 'react-router-dom';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {MotionConfig} from 'motion/react';
 import App from './App.tsx';
+import {ApiRequestError} from './lib/api';
 import './index.css';
 
 /**
@@ -12,8 +13,7 @@ import './index.css';
  *   fleet does not refetch on every mount.
  * - no refetch on window focus: nothing here is live data, and refetching when
  *   the customer comes back from WhatsApp would be pure noise.
- * - retry twice: directly serves the "no errors on load" goal on flaky mobile
- *   connections.
+ * - retry only what can actually succeed on a second attempt — see below.
  *
  * Admin reads deliberately bypass this caching at the fetch layer (`no-store`),
  * because docs/admin-rules.md requires the owner to see his own saves at once.
@@ -23,7 +23,24 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 60_000,
       refetchOnWindowFocus: false,
-      retry: 2,
+      /**
+       * Retries exist for flaky mobile connections, which is most of this
+       * site's traffic — but a blanket `retry: 2` also retried the answers that
+       * are already final. A bad car link meant three identical 404s spread
+       * over ~3s of exponential backoff while the customer watched a skeleton,
+       * because the query stays `isPending` until retries are exhausted.
+       *
+       * So: retry network failures (`status: 0`) and 5xx. Never retry a 4xx,
+       * and never retry a non-JSON body — a misrouted `/api` route serving
+       * `index.html` will not start serving JSON on the second attempt.
+       */
+      retry: (failureCount, error) => {
+        if (error instanceof ApiRequestError) {
+          if (error.code === 'invalid_response') return false;
+          if (error.status >= 400 && error.status < 500) return false;
+        }
+        return failureCount < 2;
+      },
     },
   },
 });
